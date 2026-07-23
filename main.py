@@ -2882,6 +2882,6 @@ if __name__ == "__main__":
         shutil.rmtree(UPLOAD_DIR)
     os.makedirs(UPLOAD_DIR, exist_ok=True)
     
-    host = os.getenv("HOST", "127.0.0.1")
+    host = os.getenv("HOST", "0.0.0.0")
     port = int(os.getenv("PORT", "8001"))
     uvicorn.run(app, host=host, port=port)
