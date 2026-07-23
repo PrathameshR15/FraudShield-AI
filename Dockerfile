@@ -1,0 +1,29 @@
+FROM python:3.10-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+WORKDIR /app
+
+# Install system dependencies (e.g. for opencv / image processing)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgl1-mesa-glx \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python requirements
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application files
+COPY . .
+
+# Expose default port (Railway will assign PORT dynamically)
+EXPOSE 8001
+
+# Command to run application
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8001}"]

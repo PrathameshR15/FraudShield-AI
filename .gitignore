@@ -1,0 +1,26 @@
+# Python Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+
+# Temporary Uploads & Local Cache
+temp_uploads/
+temp_downloads/
+*.log
+
+# IDE & Editor files
+.vscode/
+.idea/
+.ds_store
+*.swp

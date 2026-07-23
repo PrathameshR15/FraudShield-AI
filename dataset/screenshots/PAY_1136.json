@@ -1,0 +1,10 @@
+{
+  "payment_id": "PAY_1136",
+  "paid_amount": 1000.0,
+  "payment_time": "2026-07-17T20:01:00",
+  "receiver_name": "FRACTION PAY",
+  "receiver_upi": "fractionco@okaxis",
+  "utr": "877470168733",
+  "payment_status": "SUCCESS",
+  "ocr_confidence": 0.9797
+}

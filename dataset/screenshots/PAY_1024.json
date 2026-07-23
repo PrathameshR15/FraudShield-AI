@@ -1,0 +1,10 @@
+{
+  "payment_id": "PAY_1024",
+  "paid_amount": 125000.0,
+  "payment_time": "2026-07-16T16:01:00",
+  "receiver_name": "PERSONAL WALLET",
+  "receiver_upi": "personalaccount@okaxis",
+  "utr": "462475107991",
+  "payment_status": "SUCCESS",
+  "ocr_confidence": 0.9793
+}

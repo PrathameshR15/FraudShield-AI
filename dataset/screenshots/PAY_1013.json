@@ -1,0 +1,10 @@
+{
+  "payment_id": "PAY_1013",
+  "paid_amount": 2500.0,
+  "payment_time": "2026-07-16T13:20:00",
+  "receiver_name": "FRACTION INVEST INC",
+  "receiver_upi": "fractioninvest@ybl",
+  "utr": "893252880957",
+  "payment_status": "SUCCESS",
+  "ocr_confidence": 0.966
+}

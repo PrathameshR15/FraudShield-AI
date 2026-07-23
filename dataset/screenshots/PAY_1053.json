@@ -1,0 +1,10 @@
+{
+  "payment_id": "PAY_1053",
+  "paid_amount": 25000.0,
+  "payment_time": "2026-07-17T23:15:00",
+  "receiver_name": "FRACTIONS CO",
+  "receiver_upi": "fractions@paytm",
+  "utr": "823374989413",
+  "payment_status": "SUCCESS",
+  "ocr_confidence": 0.9595
+}

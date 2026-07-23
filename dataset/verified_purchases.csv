@@ -1,0 +1,8 @@
+amount,fractions_count,paid_amount,account_number,bank_name,branch,payment_screenshot,wallet_address,transaction_id,status,reject_reason,created_at,updated_at,user_id,id
+2500.0,1,2500.0,,,Main Branch,upload_20260721_122030_fresh_test_receipt.png,0xupload_20260721_122030_fresh_tes,887766554433,accepted,,2026-07-21 12:21:00,2026-07-21 12:21:00,999,115210
+1191.56,1,1191.56,2631,AXIS BANK,Main Branch,upload_20260721_125807_new4.jpg,0xupload_20260721_125807_new4.jpg,480310940695,accepted,,2026-07-21 12:58:42,2026-07-21 12:58:42,999,115211
+3750.0,1,3750.0,,,Main Branch,upload_20260721_131509_new.jpg,0xupload_20260721_131509_new.jpg,99001122331784619909,accepted,,2026-07-21 13:15:27,2026-07-21 13:15:27,999,115212
+5048.0,1,5048.0,2027,Union Bank of India,Main Branch,upload_20260721_132403_new5.jpg,0xupload_20260721_132403_new5.jpg,103710430478,accepted,,2026-07-21 13:24:27,2026-07-21 13:24:27,999,115213
+1190.75,1,1190.75,2150,VYES BANK,Main Branch,upload_20260721_161126_pay existing.jpg,0xupload_20260721_161126_pay exist,980013401025,accepted,,2026-07-21 16:11:47,2026-07-21 16:11:47,999,115214
+1191.61,1,1191.61,-08XXXXXXXXXX,ICICI Bank,Main Branch,upload_20260721_161244_800.jpg,0xupload_20260721_161244_800.jpg,DBPRR5N6XVVR9GP,accepted,,2026-07-21 16:12:55,2026-07-21 16:12:55,999,115215
+1190.74,1,1190.74,5613,Kotak Mahindra Bank,Main Branch,upload_20260723_121058_2.jpg,0xupload_20260723_121058_2.jpg,TXN20260723121105,accepted,,2026-07-23 12:11:05,2026-07-23 12:11:05,999,115216

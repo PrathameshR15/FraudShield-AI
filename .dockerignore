@@ -1,0 +1,10 @@
+.venv
+.git
+.gitignore
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.env
+temp_uploads/*
+!temp_uploads/.gitkeep
