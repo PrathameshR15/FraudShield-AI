@@ -26,4 +26,4 @@ COPY . .
 EXPOSE 8001
 
 # Command to run application on Railway
-CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8001}"]
+CMD ["python", "main.py"]
