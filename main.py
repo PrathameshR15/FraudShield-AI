@@ -153,6 +153,12 @@ class VerificationInput(BaseModel):
     backend_tx: BackendTransactionInput
     receipt_data: ReceiptInput
 
+@app.get("/health")
+@app.get("/api/health")
+async def health_check():
+    """Lightweight health check endpoint for Railway deployment monitoring."""
+    return {"status": "ok", "service": "FraudShield AI", "timestamp": datetime.now().isoformat()}
+
 @app.post("/api/verify")
 async def verify_payment(input_data: VerificationInput):
     """
