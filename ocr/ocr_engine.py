@@ -5,7 +5,7 @@ import json
 import base64
 import requests
 from datetime import datetime
-from typing import Dict, Any
+from typing import Dict, Any, List, Optional
 from rapidocr_onnxruntime import RapidOCR
 
 # Ensure thread count is 1 for stability in sub-processes

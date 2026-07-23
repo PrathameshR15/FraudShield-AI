@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from dateutil import parser as dt_parser
 
 def safe_parse_datetime(date_str: str) -> Optional[datetime]:
