@@ -1,3 +1,4 @@
+from typing import Any, Dict
 import os
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 
@@ -2570,6 +2571,7 @@ def get_suspicious_log():
 def check_metadata_forgery(image_path: str) -> bool:
     """Scan image metadata info keys for editing software signatures."""
     try:
+        # pyrefly: ignore [missing-import]
         from PIL import Image
         with Image.open(image_path) as img:
             info = img.info
@@ -2591,6 +2593,7 @@ def check_ela_forgery(image_path: str, quality: int = 90) -> tuple:
     Returns (mean_diff, max_diff, is_tampered)
     """
     try:
+        # pyrefly: ignore [missing-import]
         from PIL import Image, ImageChops
         import numpy as np
         
