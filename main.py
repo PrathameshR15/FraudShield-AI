@@ -10,8 +10,10 @@ def load_dotenv(dotenv_path=".env"):
                     continue
                 if "=" in line:
                     key, val = line.split("=", 1)
+                    key = key.strip()
                     val = val.strip().strip("'\"")
-                    os.environ[key.strip()] = val
+                    if key not in os.environ:
+                        os.environ[key] = val
 
 # Load environment variables
 load_dotenv()
@@ -33,6 +35,11 @@ from utils.suspicious_db import load_suspicious_db, log_suspicious_activity
 from utils.csv_loader import load_transactions_csv, append_transaction_to_csv
 
 app = FastAPI(title="Payment Fraud Detection API")
+
+@app.get("/health")
+async def health_check():
+    return {"status": "ok", "timestamp": datetime.now().isoformat()}
+
 # GST amount in INR (hard‑coded, can be made configurable later)
 GST_AMOUNT = 1000
 
@@ -2889,5 +2896,7 @@ if __name__ == "__main__":
     os.makedirs(UPLOAD_DIR, exist_ok=True)
     
     host = os.getenv("HOST", "0.0.0.0")
+    if host == "127.0.0.1" and (os.getenv("RAILWAY_STATIC_URL") or os.getenv("PORT") or os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("RAILWAY_PUBLIC_DOMAIN")):
+        host = "0.0.0.0"
     port = int(os.getenv("PORT", "8001"))
     uvicorn.run(app, host=host, port=port)
