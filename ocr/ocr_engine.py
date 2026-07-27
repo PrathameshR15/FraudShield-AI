@@ -186,19 +186,8 @@ def groq_extract_fields_from_text(text_lines: List[str], csv_context: Optional[D
         return None
 
 def extract_fields(image_path: str, csv_context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    """Run OCR on the provided image and extract relevant payment fields, prioritizing Multimodal Gemini Vision for highest accuracy on camera photos & phone notches."""
-    # Priority 1: Google Gemini Multimodal Vision API (Best for phone notches, camera photos, partially obscured numbers like 5848 vs 5048)
-    if os.environ.get("GEMINI_API_KEY"):
-        try:
-            print("[OCR Engine] Extracting fields using Google Gemini Multimodal Vision API...")
-            res = gemini_extract_fields(image_path)
-            if res and (res.get("paid_amount") or res.get("utr")):
-                print(f"[OCR Engine] Successfully extracted with Gemini Vision! Amount: {res.get('paid_amount')}, UTR: {res.get('utr')}")
-                return res
-        except Exception as e:
-            print(f"[OCR Engine] Gemini Vision API extraction fallback: {e}")
-
-    # Priority 2: Local OCR + Groq Llama-3.3 70B LLM API
+    """Run OCR on the provided image and extract relevant payment fields, prioritizing Groq Llama-3.3 70B LLM API."""
+    # Priority 1: Local OCR + Groq Llama-3.3 70B LLM API (Fast, Reliable, High Precision)
     try:
         result, elapse = _ocr(image_path)
         text_lines = [line[1].strip() for line in result if line[1].strip()] if result else []
@@ -214,6 +203,16 @@ def extract_fields(image_path: str, csv_context: Optional[Dict[str, Any]] = None
                 print(f"[OCR Engine] Groq Llama extraction exception: {e}")
     except Exception as e:
         print(f"[OCR Engine] Local OCR text line extraction failed: {e}")
+
+    # Fallback to Gemini Multimodal Vision API if explicitly configured
+    if os.environ.get("GEMINI_API_KEY"):
+        try:
+            print("[OCR Engine] Attempting Gemini Multimodal Vision API fallback...")
+            res = gemini_extract_fields(image_path)
+            if res and (res.get("paid_amount") or res.get("utr")):
+                return res
+        except Exception as e:
+            print(f"[OCR Engine] Gemini Vision API extraction fallback: {e}")
 
     try:
         # Perform Local OCR
