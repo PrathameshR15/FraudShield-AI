@@ -30,9 +30,9 @@ def load_dotenv(dotenv_path=".env"):
 load_dotenv()
 
 def gemini_extract_fields(image_path: str) -> Dict[str, Any]:
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        raise ValueError("GEMINI_API_KEY is not configured")
+    api_key = str(os.environ.get("GEMINI_API_KEY") or "").strip()
+    if not api_key or "your_" in api_key.lower():
+        raise ValueError("GEMINI_API_KEY is not valid or configured")
         
     try:
         # Read and base64-encode the image
@@ -129,8 +129,8 @@ def gemini_extract_fields(image_path: str) -> Dict[str, Any]:
         raise e
 
 def groq_extract_fields_from_text(text_lines: List[str], csv_context: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
-    api_key = os.environ.get("GROQ_API_KEY")
-    if not api_key:
+    api_key = str(os.environ.get("GROQ_API_KEY") or "").strip()
+    if not api_key or "your_" in api_key.lower():
         return None
     try:
         joined_text = "\n".join(text_lines)

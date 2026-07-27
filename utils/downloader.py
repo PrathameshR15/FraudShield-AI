@@ -10,7 +10,7 @@ def download_screenshot(
     filename: str,
     output_dir: str = DEFAULT_DOWNLOAD_DIR,
     overwrite: bool = False,
-    timeout_seconds: int = 15
+    timeout_seconds: int = 4
 ) -> Optional[str]:
     """
     Downloads a payment screenshot from the live server storage URL.
