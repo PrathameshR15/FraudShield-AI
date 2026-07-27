@@ -6,13 +6,13 @@ import base64
 import requests
 from datetime import datetime
 from typing import Dict, Any, List, Optional
-from rapidocr_onnxruntime import RapidOCR
-
-# Ensure thread count is 1 for stability in sub-processes
-os.environ["OPENBLAS_NUM_THREADS"] = "1"
-
-# Initialize RapidOCR once
-_ocr = RapidOCR()
+try:
+    from rapidocr_onnxruntime import RapidOCR
+    _ocr = RapidOCR()
+except Exception as _e:
+    print(f"[OCR Engine Warning] rapidocr_onnxruntime unavailable ({_e}). Using Cloud OCR / Gemini / Groq pipeline.")
+    def _ocr(image_path):
+        return None, 0.0
 
 def load_dotenv(dotenv_path=".env"):
     if os.path.exists(dotenv_path):
