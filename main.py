@@ -927,10 +927,10 @@ def serve_dashboard():
         except Exception:
             pass
 
-    # Check if Gemini API key is configured
-    is_gemini_active = "GEMINI_API_KEY" in os.environ and len(os.environ["GEMINI_API_KEY"]) > 5
-    if is_gemini_active:
-        ocr_status_badge = '<div style="margin-top: 10px;"><span class="status-badge status-llm">LLM OCR Active (Gemini)</span></div>'
+    # Check if Groq or Gemini API key is configured
+    is_llm_active = ("GROQ_API_KEY" in os.environ and len(os.environ["GROQ_API_KEY"]) > 5) or ("GEMINI_API_KEY" in os.environ and len(os.environ["GEMINI_API_KEY"]) > 5)
+    if is_llm_active:
+        ocr_status_badge = '<div style="margin-top: 10px;"><span class="status-badge status-llm">LLM OCR Active (Groq Llama-3.3 70B)</span></div>'
     else:
         ocr_status_badge = '<div style="margin-top: 10px;"><span class="status-badge status-offline">Offline OCR Mode (RapidOCR)</span></div>'
 
@@ -2237,8 +2237,9 @@ def serve_dashboard():
                     
                     const engineTd = document.getElementById('td-ocr-engine');
                     if (engineTd) {{
-                        const isLLM = data.ocr_details.engine === 'gemini' || uploadedImageEngine === 'gemini';
-                        engineTd.textContent = isLLM ? 'Google Gemini 1.5 Flash (LLM)' : 'Offline OCR (RapidOCR)';
+                        const engineName = data.ocr_details.engine || uploadedImageEngine || 'Groq Llama-3.3 70B';
+                        const isLLM = engineName.includes('Groq') || engineName.includes('Gemini') || engineName.includes('Llama') || engineName.includes('LLM');
+                        engineTd.textContent = isLLM ? (engineName.includes('LLM') ? engineName : `${{engineName}} (LLM)`) : 'Offline OCR (RapidOCR)';
                         engineTd.style.color = isLLM ? '#818cf8' : '#fbbf24';
                     }}
 
