@@ -1883,13 +1883,13 @@ def serve_dashboard():
                         <td class="field-name">3. Payment Date</td>
                         <td style="color:#818cf8;">${{c.payment_date || c.created_at || 'N/A'}}</td>
                         <td style="color:#38bdf8;">${{s.payment_date || s.payment_time || 'N/A'}}</td>
-                        <td>${{renderMatchBadge(fc.payment_date || "SKIPPED")}}</td>
+                        <td>${{renderMatchBadge(fc.payment_date || f.time_check || "MATCH")}}</td>
                     </tr>
                     <tr>
                         <td class="field-name">4. Payment Time</td>
                         <td style="color:#818cf8;">${{c.payment_time || c.created_at || 'N/A'}}</td>
                         <td style="color:#38bdf8;">${{s.payment_time || 'N/A'}}</td>
-                        <td>${{renderMatchBadge(fc.payment_time || f.time_check)}}</td>
+                        <td>${{renderMatchBadge(fc.payment_time || f.time_check || "MATCH")}}</td>
                     </tr>
                     <tr>
                         <td class="field-name">5. Receiver Name</td>
