@@ -1,5 +1,7 @@
 import os
 import pickle
+import warnings
+warnings.filterwarnings("ignore")
 import pandas as pd
 from typing import Dict, Any, Tuple
 

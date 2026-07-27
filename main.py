@@ -1,5 +1,7 @@
 from typing import Any, Dict
 import os
+import warnings
+warnings.filterwarnings("ignore")
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 
 def load_dotenv(dotenv_path=".env"):
