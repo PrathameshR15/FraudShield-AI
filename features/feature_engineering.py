@@ -283,13 +283,20 @@ def generate_feature_vector(
         status_match = "YES" if b_norm == o_norm and b_norm == "COMPLETED" else "NO"
     
     # 3. Flexible Date & Time match logic (Acceptable threshold: 12 hours / 1 day)
-    ss_date_str = ""
-    if ocr_data.get("payment_date") and ocr_data.get("payment_time"):
-        ss_date_str = f"{ocr_data.get('payment_date')} {ocr_data.get('payment_time')}".strip()
-    elif ocr_data.get("payment_date"):
-        ss_date_str = str(ocr_data.get("payment_date")).strip()
-    elif ocr_data.get("payment_time"):
-        ss_date_str = str(ocr_data.get("payment_time")).strip()
+    ss_time_raw = str(ocr_data.get("payment_time") or "").strip()
+    ss_date_raw = str(ocr_data.get("payment_date") or "").strip()
+    
+    if ss_time_raw and len(ss_time_raw) >= 10 and ("-" in ss_time_raw[:10] or "/" in ss_time_raw[:10]):
+        ss_date_str = ss_time_raw
+    elif ss_date_raw and ss_time_raw:
+        if ss_date_raw.lower() in ss_time_raw.lower():
+            ss_date_str = ss_time_raw
+        else:
+            ss_date_str = f"{ss_date_raw} {ss_time_raw}".strip()
+    elif ss_date_raw:
+        ss_date_str = ss_date_raw
+    elif ss_time_raw:
+        ss_date_str = ss_time_raw
     else:
         ss_date_str = upload_time
         
