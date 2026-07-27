@@ -377,42 +377,58 @@ def extract_fields(image_path: str, csv_context: Optional[Dict[str, Any]] = None
                     break
 
         # 5. Amount Parsing (Avoid clock times, UTRs, transaction IDs)
-        amount_candidates = []
+        # 5. Amount Parsing (Avoid clock times, UTRs, account numbers, transaction IDs)
+        amount_candidates_currency = []
+        amount_candidates_decimal = []
+        amount_candidates_generic = []
+
+        non_amount_keywords = {"utr", "txn", "ref", "id", "account", "bank", "a/c", "card", "date", "time", "pm", "am", "phone"}
+
         for i, text in enumerate(text_lines):
-            clean_text = text.lower()
-            if "rupees" in clean_text or "only" in clean_text:
-                if i - 1 >= 0:
-                    prev_text = text_lines[i - 1].replace(",", "")
-                    match = re.search(r'\b\d+(?:\.\d{2})?\b', prev_text)
-                    if match:
-                        amount_candidates.append(float(match.group(0)))
-                        
-        for text in text_lines:
+            clean_lower = text.lower().strip()
+            if any(kw in clean_lower for kw in non_amount_keywords):
+                continue
+                
             clean_text = text.replace(",", "")
-            # Match currency indicators: Rs, ₹, INR, R, or individual T prefixes
-            match = re.search(r'(?:Rs\.?|₹|INR|R|\bT\b)\s*(\d+(?:\.\d{2})?)', clean_text, re.IGNORECASE)
+            # Currency symbol match (e.g. Rs. 1190.74 or ₹1190.74)
+            match = re.search(r'(?:Rs\.?|₹|INR)\s*(\d+(?:\.\d{1,2})?)', clean_text, re.IGNORECASE)
             if match:
                 try:
                     val = float(match.group(1))
                     if 1.0 <= val <= 1000000.0:
-                        amount_candidates.append(val)
+                        amount_candidates_currency.append(val)
                 except ValueError:
                     pass
             
-            # Numeric values that look like amounts (e.g. 10,000 or 500.00)
-            match_numeric = re.search(r'\b\d{1,3}(?:,\d{3})+(?:\.\d{2})?\b|\b\d+(?:\.\d{2})?\b', text)
-            if match_numeric:
-                numeric_str = match_numeric.group(0).replace(",", "")
+            # Decimal amount match (e.g. 1190.74 or 1,190.74)
+            match_dec = re.search(r'\b\d{1,3}(?:,\d{3})*\.\d{2}\b|\b\d+\.\d{2}\b', text)
+            if match_dec:
                 try:
-                    val = float(numeric_str)
-                    if 1.0 <= val <= 1000000.0 and len(numeric_str) < 9 and ":" not in text:
-                        amount_candidates.append(val)
+                    val = float(match_dec.group(0).replace(",", ""))
+                    if 1.0 <= val <= 1000000.0:
+                        amount_candidates_decimal.append(val)
                 except ValueError:
                     pass
 
-        if amount_candidates:
-            # Pick the maximum candidate which represents the main transaction value
-            extracted["paid_amount"] = max(amount_candidates)
+            # Generic numeric match (excluding 4-digit account numbers like 5613 and 12-digit UTRs)
+            match_gen = re.search(r'\b\d{1,3}(?:,\d{3})+\b|\b\d+\b', text)
+            if match_gen and not match_dec and not match:
+                num_str = match_gen.group(0).replace(",", "")
+                if len(num_str) in [4, 12, 16] and not any(symbol in text for symbol in ["Rs", "₹", "INR"]):
+                    continue
+                try:
+                    val = float(num_str)
+                    if 10.0 <= val <= 1000000.0 and ":" not in text:
+                        amount_candidates_generic.append(val)
+                except ValueError:
+                    pass
+
+        if amount_candidates_currency:
+            extracted["paid_amount"] = amount_candidates_currency[0]
+        elif amount_candidates_decimal:
+            extracted["paid_amount"] = amount_candidates_decimal[0]
+        elif amount_candidates_generic:
+            extracted["paid_amount"] = max(amount_candidates_generic)
 
         # 6. Timestamp Parsing
         for text in text_lines:
