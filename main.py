@@ -773,12 +773,25 @@ async def get_screenshot_image(filename: str):
     """Serves the downloaded payment screenshot image for UI preview."""
     local_dir = os.path.join("temp_uploads", "live_screenshots")
     local_path = os.path.join(local_dir, filename)
-    if os.path.exists(local_path):
+    if os.path.exists(local_path) and os.path.getsize(local_path) > 0:
         return FileResponse(local_path)
     
     preset_path = os.path.join("dataset", "screenshots", filename)
-    if os.path.exists(preset_path):
+    if os.path.exists(preset_path) and os.path.getsize(preset_path) > 0:
         return FileResponse(preset_path)
+        
+    uploads_path = os.path.join("dataset", "uploads", filename)
+    if os.path.exists(uploads_path) and os.path.getsize(uploads_path) > 0:
+        return FileResponse(uploads_path)
+        
+    # Download on-demand if missing on Railway ephemeral filesystem
+    try:
+        from utils.downloader import download_screenshot
+        downloaded = download_screenshot(filename)
+        if downloaded and os.path.exists(downloaded) and os.path.getsize(downloaded) > 0:
+            return FileResponse(downloaded)
+    except Exception as e:
+        print(f"[Main Server Warning] On-demand screenshot download failed for '{filename}': {e}")
         
     raise HTTPException(status_code=404, detail="Screenshot image file not found")
 
