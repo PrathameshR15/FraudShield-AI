@@ -1,8 +1,12 @@
 from typing import Any, Dict
 import os
+import sys
 import warnings
 warnings.filterwarnings("ignore")
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
+
+# Redirect stderr to stdout so Railway dashboard renders logs in white/green instead of red font
+sys.stderr = sys.stdout
 
 def load_dotenv(dotenv_path=".env"):
     if os.path.exists(dotenv_path):
